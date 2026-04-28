@@ -2,7 +2,8 @@ const mongoose = require("mongoose")
 
 const replySchema = new mongoose.Schema({
     reply : {
-        type : String
+        type : String,
+        required : true
     },
     owner : {
         type : mongoose.Schema.Types.ObjectId,
