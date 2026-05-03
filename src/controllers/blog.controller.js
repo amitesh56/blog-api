@@ -76,7 +76,7 @@ async function getAllBlog(req,res) {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
-        const blog = await blogModel.find({}).sort({ createdAt: -1 }).skip(skip).limit(limit);
+        const blogs = await blogModel.find({}).sort({ createdAt: -1 }).skip(skip).limit(limit);
         res.status(200).json({
             
             page,
