@@ -2,39 +2,39 @@ const commentModel = require("../models/comment.model")
 const blogModel = require("../models/blog.model")
 const commentValidator = require("../validators/commentData.validator")
 
-async function commentPost(req,res) {
+async function commentPost(req, res) {
     try {
-        const owner = req.user;
+        const owner = req.user.id;
         const blog = req.params.id;
 
         const blogExists = await blogModel.findById(blog);
         if (!blogExists) {
-            return res.status(404).json({
-                message: "Blog not found"
+            return res.status(404).json({ message: "Blog not found" });
+        }
+
+        const isValidComment = commentValidator.safeParse(req.body);
+        if (!isValidComment.success) {
+            return res.status(422).json({
+                message: isValidComment.error.errors.map(e => e.message)
             });
         }
 
-        const isvalidComment = commentValidator.safeParse(req.body)
-        if(!isvalidComment.success){
-            return res.status(422).json({
-                message : isvalidComment.error.errors.map(e=>e.message)
-            })
-        }
+        const { comments } = isValidComment.data;
 
-        const comments = isvalidComment.data;
-        const result = await commentModel.create({comments,owner,blog})
+        const result = await commentModel.create({
+            comments,
+            owner,
+            blog
+        });
 
         res.status(201).json({
-            message : "comment is created",
-            result
-        })
-        
+            message: "Comment created",
+            comment: result
+        });
+
     } catch (error) {
-        res.status(500).json({
-            message : error.message
-        })
+        res.status(500).json({ message: error.message });
     }
-    
 }
 
 async function getAllComments(req,res) {
@@ -74,3 +74,66 @@ async function getAllComments(req,res) {
     }
 }
 
+async function updateComment(req, res) {
+    try {
+        const owner = req.user.id;
+        const commentId = req.params.id;
+
+        const isValidComment = commentValidator.safeParse(req.body);
+        if (!isValidComment.success) {
+            return res.status(422).json({
+                message: isValidComment.error.errors.map(e => e.message)
+            });
+        }
+
+        const { comments } = isValidComment.data;
+
+        const result = await commentModel.findOneAndUpdate(
+            { _id: commentId, owner },
+            { $set: { comments } },
+            { new: true, runValidators: true }
+        );
+
+        if (!result) {
+            return res.status(404).json({
+                message: "Comment not found or not authorized"
+            });
+        }
+
+        res.status(200).json({
+            message: "Comment updated",
+            comment: result
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+async function deleteComment(req, res) {
+    try {
+        const owner = req.user.id;
+        const commentId = req.params.id;
+
+        const result = await commentModel.findOneAndDelete({
+            _id: commentId,
+            owner
+        });
+
+        if (!result) {
+            return res.status(404).json({
+                message: "Comment not found or not authorized"
+            });
+        }
+
+        res.status(200).json({
+            message: "Comment deleted successfully",
+            comment: result
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+module.exports = {commentPost,getAllComments,updateComment,deleteComment}

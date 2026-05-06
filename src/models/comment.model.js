@@ -2,8 +2,11 @@ const mongoose = require("mongoose")
 
 const commentSchema = new mongoose.Schema({
     comments : {
-        type : String,
-        required : true
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 1,
+        maxlength: 500
     },
     owner : {
         type : mongoose.Schema.Types.ObjectId,
