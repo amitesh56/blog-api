@@ -1,3 +1,4 @@
+const mongoose = require("mongoose")
 const commentModel = require("../models/comment.model")
 const blogModel = require("../models/blog.model")
 const commentValidator = require("../validators/commentData.validator")
@@ -6,6 +7,12 @@ async function commentPost(req, res) {
     try {
         const owner = req.user.id;
         const blog = req.params.id;
+
+         if (!mongoose.Types.ObjectId.isValid(blog)) {
+            return res.status(400).json({
+                message: "Invalid blog ID"
+            });
+        }
 
         const blogExists = await blogModel.findById(blog);
         if (!blogExists) {

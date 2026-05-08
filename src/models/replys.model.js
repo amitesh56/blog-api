@@ -1,22 +1,30 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 const replySchema = new mongoose.Schema({
-    reply : {
-        type : String,
-        required : true
-    },
-    owner : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "user"
+    reply: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 1,
+        maxlength: 300
     },
 
-    comment : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "comment"
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+        required: true
+    },
+
+    comment: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "comment",
+        required: true
     }
-},{timestamps:true})
 
+}, { timestamps: true });
+
+replySchema.index({ comment: 1 });
 
 const replyModel = mongoose.model("reply", replySchema);
 
-module.exports = replyModel
+module.exports = replyModel;
