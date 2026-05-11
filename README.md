@@ -89,7 +89,7 @@ This project demonstrates:
 | Cloudinary | Cloud Image Storage |
 | Zod | Validation |
 | Cookie Parser | Cookie Handling |
-| CORS | Cross-Origin Requests |
+
 
 ---
 
