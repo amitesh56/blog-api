@@ -443,8 +443,6 @@ This project helped me understand:
 Computer Engineering Student passionate about:
 - Backend Development
 - System Design
-- Blockchain
-- AI & Emerging Technologies
 
 GitHub:
 https://github.com/amitesh56
