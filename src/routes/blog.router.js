@@ -2,7 +2,7 @@ const express = require("express");
 const multer = require("multer");
 
 const blogController = require("../controllers/blog.controller");
-const authMiddleware = require("../middleware/auth.middleware");
+const authMiddleware = require("../middleware/token.auth");
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ const upload = multer({
 
 router.post(
     "/",
-    authMiddleware.authUser,
+    authMiddleware,
     upload.single("coverImage"),
     blogController.createBlog
 );
@@ -38,7 +38,7 @@ router.get(
 
 router.put(
     "/:id",
-    authMiddleware.authUser,
+    authMiddleware,
     upload.single("coverImage"),
     blogController.updateBlog
 );
@@ -47,7 +47,7 @@ router.put(
 
 router.delete(
     "/:id",
-    authMiddleware.authUser,
+    authMiddleware,
     blogController.deleteBlog
 );
 

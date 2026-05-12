@@ -2,10 +2,10 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 
 
-const authRoutes = require("./routes/auth.routes");
-const blogRoutes = require("./routes/blog.routes");
-const commentRoutes = require("./routes/comment.routes");
-const replyRoutes = require("./routes/reply.routes");
+const authRoutes = require("./routes/auth.router");
+const blogRoutes = require("./routes/blog.router");
+const commentRoutes = require("./routes/comment.router");
+const replyRoutes = require("./routes/reply.router");
 
 const app = express();
 

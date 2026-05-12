@@ -1,7 +1,7 @@
 const express = require("express");
 
 const replyController = require("../controllers/reply.controller");
-const authMiddleware = require("../middleware/auth.middleware");
+const authMiddleware = require("../middleware/token.auth");
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post(
     "/comments/:id/replies",
-    authMiddleware.authUser,
+    authMiddleware,
     replyController.createReply
 );
 
@@ -23,7 +23,7 @@ router.get(
 
 router.put(
     "/replies/:id",
-    authMiddleware.authUser,
+    authMiddleware,
     replyController.updateReply
 );
 
@@ -31,7 +31,7 @@ router.put(
 
 router.delete(
     "/replies/:id",
-    authMiddleware.authUser,
+    authMiddleware,
     replyController.deleteReply
 );
 
